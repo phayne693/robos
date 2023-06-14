@@ -10,7 +10,6 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-import pyautogui
 import os
 import glob
 from selenium.common.exceptions import ElementClickInterceptedException
