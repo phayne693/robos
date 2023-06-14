@@ -21,7 +21,6 @@ mss
 outcome
 packaging
 Pillow
-PyAutoGUI
 PyGetWindow
 PyMsgBox
 pyperclip
