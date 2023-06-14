@@ -40,6 +40,7 @@ options.add_experimental_option("prefs", {
 })
 prefs = {"download.default_directory": "/home/jeferson/aws-puppeteer/clubeBeneficio"}
 opt = webdriver.ChromeOptions()
+opt.add_argument('--headless')
 opt.add_experimental_option("prefs", prefs)
 
 
