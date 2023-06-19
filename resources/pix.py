@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
-from pix_cpf import robo_pix
-from pix_copy_cola import pix_copia_cola
+from robos.pix_cpf import robo_pix
+from robos.pix_copy_cola import pix_copia_cola
 
 class Pix_cpf(Resource):
     def post(self):

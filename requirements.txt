@@ -45,3 +45,4 @@ webdriver-manager
 Werkzeug
 wsproto
 chromedriver-binary
+clipboard
