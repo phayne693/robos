@@ -13,8 +13,9 @@ class Pix_cpf(Resource):
         #retorna o resultado na API
         if resultado == 'Pix realizado!':
             return {'success' : True, 'message' :resultado }, 200
-        else:
+        elif resultado == 'Erro':
             return {'success' : False, 'message' : resultado }, 500
+        
 
 class PiX_copy_cola(Resource):
     def post(self):
