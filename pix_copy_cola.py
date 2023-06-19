@@ -14,6 +14,8 @@ import os
 import glob
 from selenium.common.exceptions import ElementClickInterceptedException
 import requests
+import subprocess
+import clipboard 
 
 # def bevi_download():
 # definindo opcoes para o navegador
@@ -27,6 +29,8 @@ page = Service(ChromeDriverManager().install())
 location = '{"latitude": -23.5102, "logitude": -46.6590}'
 # defininso as ocnfiguracoes do navegador
 options.add_argument(f"--geolocation={location}")
+options.add_argument("--disk-cache-dir=/home/jeferson/Área de Trabalho/roboPix")
+options.add_argument("--disk-cache-size=104857600")
 options.add_argument("--disable-extensions")
 options.add_argument("--disable-popup-blocking")
 options.add_argument("--disable-infobars")
@@ -34,6 +38,7 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-browser-side-navigation")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
+options.add_argument("--disable_images")
 options.add_experimental_option("prefs", {
     "donwload.default.directory": "/home/jeferson/aws-puppeteer/clubeBeneficio"
 })
@@ -46,7 +51,7 @@ opt.add_experimental_option("prefs", prefs)
 def pix_copia_cola(chave_copia_cola):
     navegador = webdriver.Chrome(service=page, options=opt)
     navegador.get('https://app.norwaydigital.com.br/auth/signin')
-    time.sleep(3)
+    time.sleep(4)
 
     # inserir login
     login = navegador.find_element(By.XPATH, '//*[@id="text"]')
@@ -87,42 +92,52 @@ def pix_copia_cola(chave_copia_cola):
     if response.status_code == 200:
         saldo = response.json()
         print(saldo)
+        valor_minimo = 0.01
+        if saldo > valor_minimo:
+            #click pagar
+            pagar = WebDriverWait(navegador, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/div[1]/div/div/ul/label[3]/div'))
+            )
+            pagar.click()
+            time.sleep(2)
+            #click copia e cola
+            copy_cola = WebDriverWait(navegador, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/div/div[2]/div'))
+            )
+            copy_cola.click()
+            #digitar copia e cola
+            input_copy_cola = WebDriverWait(navegador, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/form/div/input'))
+            )
+            input_copy_cola.click()
+            #limpa a area de transferencia
+            subprocess.run(['xsel', '-bc'], check=True)
+            #copia a variavel
+            clipboard.copy(chave_copia_cola)
+            #simula ctrl+v e envia a chave
+            ActionChains(navegador).key_down(Keys.CONTROL).send_keys('v').perform()
+            ActionChains(navegador).key_up(Keys.CONTROL)
+            # input_copy_cola.send_keys(chave_copia_cola)
+            time.sleep(2)
+            #click confirmar
+            confirmar = WebDriverWait(navegador, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/button'))
+            )
+            confirmar.click()
+            time.sleep(1)
+            #confirmar 2
+            confirmar_dois = WebDriverWait(navegador, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button[2]'))
+            )
+            confirmar_dois.click()
+            time.sleep(2)
+            navegador.quit()
+            return 'Pix copia e cola realizado!'
+        else:
+            return 'Pix não realizado'
     else:
         print(response.status_code)
-    if saldo > 0.01:
-        #click pagar
-        pagar = WebDriverWait(navegador, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/div[1]/div/div/ul/label[3]/div'))
-        )
-        pagar.click()
-        time.sleep(2)
-        #click copia e cola
-        copy_cola = WebDriverWait(navegador, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/div/div[2]/div'))
-        )
-        copy_cola.click()
-        #digitar copia e cola
-        input_copy_cola = WebDriverWait(navegador, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/form/div/input'))
-        )
-        #simula ctrl+v e envia a chave
-        ActionChains(navegador).key_down(Keys.CONTROL).send_keys('v').perform()
-        input_copy_cola.send_keys(chave_copia_cola)
-        ActionChains(navegador).key_up(Keys.CONTROL)
-        time.sleep(2)
-        #click confirmar
-        confirmar = WebDriverWait(navegador, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/button'))
-        )
-        confirmar.click()
-        time.sleep(1)
-        #confirmar 2
-        confirmar_dois = WebDriverWait(navegador, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button[2]'))
-        )
-        confirmar_dois.click()
-        return 'Pix copia e cola realizado!'
-    else:
-        return 'Pix não realizado'
+
+    
 
 

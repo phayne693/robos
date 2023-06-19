@@ -24,3 +24,15 @@ class PiX_copy_cola(Resource):
             return {'success': True, 'message': resutlado}, 200
         else:
             return {'success': True, 'message': resutlado}, 500
+
+
+class Pix_cpf_modelo:
+    def __init__(self,chave_cpf, valor):
+        self.chave_cpf = chave_cpf
+        self.valor = valor
+    
+    def json(self):
+        return{
+            'chave_cpf': self.chave_cpf,
+            'valor': self.valor
+        }
