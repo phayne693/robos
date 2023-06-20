@@ -133,21 +133,21 @@ def robo_pix(chave_cpf, valor):
             EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/div[2]/div[1]/div[2]/span[2]'))
         )
         nome = nome_elemento.text
-        print(nome)
-        if nome == destinatario:
-            enviar = WebDriverWait(navegador, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button[2]'))
-            )
-            enviar.click()
-            time.sleep(1)
-            #finalizar
-            finalizar = WebDriverWait(navegador, 10).until(
-                EC. presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button'))
-            )
-            finalizar.click()
-            return 'Pix realizado!'
-        else:
-            return 'Nome divergente.'
+        # print(nome)
+        enviar = WebDriverWait(navegador, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button[2]'))
+        )
+        enviar.click()
+        time.sleep(1)
+        #finalizar
+        finalizar = WebDriverWait(navegador, 10).until(
+            EC. presence_of_element_located((By.XPATH, '//*[@id="single-spa-application:@infinity/navigation"]/div/div[2]/div[2]/div/div/div/div/div/section/p[2]/button'))
+        )
+        finalizar.click()
+        time.sleep(2)
+        navegador.quit()
+        return 'Pix realizado!'
+
     else:
         return "Saldo insuficiente."
     pass
