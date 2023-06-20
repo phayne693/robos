@@ -24,7 +24,7 @@ class PiX_copy_cola(Resource):
         if resutlado == 'Pix copia e cola realizado!':
             return {'success': True, 'message': resutlado}, 200
         else:
-            return {'success': True, 'message': resutlado}, 500
+            return {'success': False, 'message': resutlado}, 500
 
 
 class Pix_cpf_modelo:
