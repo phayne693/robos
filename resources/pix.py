@@ -13,7 +13,7 @@ class Pix_cpf(Resource):
         #retorna o resultado na API
         if resultado == 'Pix realizado!':
             return {'success' : True, 'message' :resultado }, 200
-        elif resultado == 'Erro':
+        elif resultado != 'Pix realizado!':
             return {'success' : False, 'message' : resultado }, 500
         
 

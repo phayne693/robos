@@ -13,7 +13,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import os
 import glob
-from selenium.common.exceptions import ElementClickInterceptedException
 import requests
 import subprocess
 import clipboard
@@ -133,13 +132,16 @@ def pix_copia_cola(chave_copia_cola):
                     navegador.quit()
                     return 'Pix copia e cola realizado!'
                 else:
+                    navegador.quit()
                     return {'error':'Saldo insuficiente.'}
             except WebDriverException as e:
                 navegador.quit()
                 return {'error' : str(e)}
         else:
-            return {'error' : response.status_code}
+            navegador.quit()
+            return {'code' : response.status_code, 'error': response.text.json()}
     except WebDriverException as e:
+        navegador.quit()
         return {'error': str(e)}
 
     
