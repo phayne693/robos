@@ -8,6 +8,11 @@ class Pix_cpf(Resource):
         #obtem as variaveis do payload
         chave_cpf = request.json.get('chave_cpf')
         valor = request.json.get('valor')
+        #valida o tamanho das variaveis
+        if len(chave_cpf) > 11:
+            return {'success': False, 'message': 'Chave CPF deve ter no maximo 11 numeros'}, 400
+        elif not chave_cpf.isnumeric():
+            return {'success': False, 'message': 'CPF deve conter apenas numeros'}, 400
         #resultado pega o return da funcao robo
         resultado = robo_pix(chave_cpf, valor)
         #retorna o resultado na API
