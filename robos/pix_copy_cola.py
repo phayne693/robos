@@ -16,6 +16,8 @@ import glob
 import requests
 import subprocess
 import clipboard
+from dotenv import load_dotenv
+load_dotenv()
 
 # def bevi_download():
 # definindo opcoes para o navegador
@@ -50,16 +52,18 @@ opt.add_experimental_option("prefs", prefs)
 
 def pix_copia_cola(chave_copia_cola):
     try:   
+        login_env = os.getenv("LOGIN")
+        senha_env = os.getenv("SENHA")
         navegador = webdriver.Chrome(service=page, options=opt)
         navegador.get('https://app.norwaydigital.com.br/auth/signin')
         time.sleep(4)
         # inserir login
         login = navegador.find_element(By.XPATH, '//*[@id="text"]')
-        login.send_keys('thiago@teraidc.com.br')
+        login.send_keys(login_env)
         # senha
         procurarSenha = navegador.find_element(By.XPATH, '//*[@id="teste"]')
         numerosBtn = procurarSenha.find_elements(By.TAG_NAME, 'button')
-        senha = [1, 1, 2, 0, 2, 2]
+        senha = [int(digito) for digito in senha_env]
         listaBtn = [button.get_attribute('textContent').replace(
             'ou', '') for button in numerosBtn]
         # print(listaBtn)
